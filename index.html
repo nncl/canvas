@@ -7,7 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>CAOA</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+          rel="stylesheet">
 
     <style>
         html,
@@ -47,7 +48,9 @@
 
             var imageUser = new Image();
             imageUser.onload = function () {
-                context.drawImage(imageUser, 11, 695);
+                context.arc(95, 785, 85, 0, Math.PI * 2, true); // you can use any shape
+                context.clip();
+                context.drawImage(imageUser, 0, 700);
             }
             imageUser.src = "img/user.png";
         };
