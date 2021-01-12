@@ -46,16 +46,41 @@
             context.fillStyle = "#FFFFFF";
             context.fillText("camila.cruz@caoa.com.br", 533.1, 849.5);
 
+            /**
+             * Create rounded user thumb
+             * @type {HTMLImageElement}
+             */
             var imageUser = new Image();
             imageUser.onload = function () {
-                context.arc(95, 785, 85, 0, Math.PI * 2, true); // you can use any shape
-                context.clip();
-                context.drawImage(imageUser, 0, 700);
+                /**
+                 * Fake canvas
+                 * @type {HTMLCanvasElement}
+                 */
+
+                var scratchCanvas = document.createElement('canvas');
+                scratchCanvas.width = 176;
+                scratchCanvas.height = 176;
+                var scratchCtx = scratchCanvas.getContext('2d');
+
+                scratchCtx.clearRect(0, 0, scratchCanvas.width, scratchCanvas.height);
+                scratchCtx.globalCompositeOperation = 'source-over'; // default
+                scratchCtx.drawImage(imageUser, 0, 0);
+
+                scratchCtx.fillStyle = '#fff'; // color doesn't matter, but we want full opacity
+                scratchCtx.globalCompositeOperation = 'destination-in';
+                scratchCtx.beginPath();
+                scratchCtx.arc(88, 88, 86.5, 0, 2 * Math.PI, true);
+                scratchCtx.closePath();
+                scratchCtx.fill();
+
+                context.drawImage(scratchCanvas, 7, 696.6);
             }
             imageUser.src = "img/user.png";
         };
         imageObj.src = "img/bg.png";
     };
+
+    // Thanks to https://stackoverflow.com/a/4729778/4495348
 </script>
 </body>
 </html>
