@@ -31,9 +31,14 @@
     <button>
         Create
     </button>
+
+    <button onclick="download(event)" type="button">
+        Download
+    </button>
 </form>
 
 <script>
+    // Thanks to https://stackoverflow.com/a/4729778/4495348
     function createImage(
         username,
         job,
@@ -104,8 +109,6 @@
         imageObj.src = "img/bg.png";
     };
 
-    // Thanks to https://stackoverflow.com/a/4729778/4495348
-
     function create(e) {
         e.preventDefault();
 
@@ -116,6 +119,13 @@
         var thumb = document.getElementsByName('thumb')[0].files[0];
 
         createImage(username, job, phone, email, thumb);
+    }
+
+    function download() {
+        var link = document.createElement('a');
+        link.download = 'caoa.png';
+        link.href = document.getElementById('myCanvas').toDataURL()
+        link.click();
     }
 </script>
 </body>
