@@ -15,32 +15,61 @@
         body {
             margin: 0;
             padding: 0;
+            font-family: 'Roboto Condensed';
         }
 
-        h1 {
-            font-family: 'Roboto Condensed';
+        input:focus,
+        button:focus {
+            outline: none;
+        }
+
+        input {
+            border: 1px solid #46437e;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background: #46437e;
+            color: #fff;
+            border: 0;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        h1,
+        form {
+            margin: 10px;
         }
     </style>
 </head>
 <body>
 <h1>CAOA Canvas</h1>
-<canvas id="myCanvas" width="900" height="900"></canvas>
 
 <form onsubmit="create(event)" method="POST">
-    <input type="text" name="username" placeholder="Username">
-    <input type="text" name="job" placeholder="Job">
-    <input type="tel" name="phone" placeholder="Phone">
+    <input type="text" name="username" placeholder="Nome" maxlength="15">
+    <input type="text" name="job" placeholder="Cargo">
+    <input type="tel" name="phone" placeholder="Telefone">
     <input type="email" name="email" placeholder="E-mail">
-    <input type="file" name="thumb">
+
+    <div>
+        <label for="thumb">Imagem usuário (176x176)</label>
+        <input type="file" name="thumb" id="thumb">
+    </div>
 
     <button>
-        Create
+        Criar
     </button>
 
     <button onclick="download(event)" type="button">
-        Download
+        Baixar
     </button>
 </form>
+
+<canvas id="myCanvas" width="900" height="900"></canvas>
 
 <script>
     // Thanks to https://stackoverflow.com/a/4729778/4495348
