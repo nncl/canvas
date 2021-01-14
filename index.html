@@ -9,6 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
           rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.9/cropper.min.css"
+          integrity="sha512-w+u2vZqMNUVngx+0GVZYM21Qm093kAexjueWOv9e9nIeYJb1iEfiHC7Y+VvmP/tviQyA5IR32mwN/5hTEJx6Ng=="
+          crossorigin="anonymous"/>
 
     <style>
         html,
@@ -60,6 +63,10 @@
         <input type="file" name="thumb" id="thumb">
     </div>
 
+    <div>
+        <img src="" alt="" id="preview">
+    </div>
+
     <button>
         Criar
     </button>
@@ -71,7 +78,63 @@
 
 <canvas id="myCanvas" width="900" height="900"></canvas>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.9/cropper.min.js"
+        integrity="sha512-9pGiHYK23sqK5Zm0oF45sNBAX/JqbZEP7bSDHyt+nT3GddF+VFIcYNqREt0GDpmFVZI3LZ17Zu9nMMc9iktkCw=="
+        crossorigin="anonymous"></script>
 <script>
+    var cropper;
+
+    window.onload = function () {
+        onUploadChange();
+    };
+
+    function onUploadChange() {
+        var imgPreview = document.getElementById('preview');
+        var fileInput = document.getElementById('thumb');
+
+        fileInput.addEventListener('change', function () {
+            reset();
+
+            var singleFile = fileInput.files[0]
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                imgPreview.src = e.target.result;
+                createPreview();
+            }
+
+            reader.readAsDataURL(singleFile);
+        }, false);
+    }
+
+    function createPreview() {
+        var image = document.getElementById('preview');
+        cropper = new Cropper(image, {
+            dragMode: 'none',
+            cropBoxResizable: false,
+            zoomOnWheel: false,
+            zoomOnTouch: false,
+            ready: function () {
+                cropper.setCropBoxData({width: 176, height: 176});
+                cropper.zoomTo(1);
+            }
+        });
+    }
+
+    function reset() {
+        if (cropper) {
+            cropper.destroy();
+        }
+    }
+
+    function getPreviewCanvas() {
+        return new Promise(function (resolve) {
+            cropper.getCroppedCanvas().toBlob(function (blob){
+                resolve(blob);
+            })
+        });
+    }
+
     // Thanks to https://stackoverflow.com/a/4729778/4495348
     function createImage(
         username,
@@ -143,16 +206,18 @@
         imageObj.src = "img/bg.png";
     };
 
-    function create(e) {
+    async function create(e) {
         e.preventDefault();
+
+        cropper.crop();
+        var croppedThumb = await getPreviewCanvas();
 
         var username = document.getElementsByName('username')[0].value;
         var job = document.getElementsByName('job')[0].value;
         var phone = document.getElementsByName('phone')[0].value;
         var email = document.getElementsByName('email')[0].value;
-        var thumb = document.getElementsByName('thumb')[0].files[0];
 
-        createImage(username, job, phone, email, thumb);
+        createImage(username, job, phone, email, croppedThumb);
     }
 
     function download() {
