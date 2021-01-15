@@ -47,6 +47,11 @@
         form {
             margin: 10px;
         }
+
+        .preview-wrapper {
+            width: 640px;
+            height: 320px;
+        }
     </style>
 </head>
 <body>
@@ -63,17 +68,23 @@
         <input type="file" name="thumb" id="thumb">
     </div>
 
-    <div>
+    <div class="preview-wrapper">
         <img src="" alt="" id="preview">
     </div>
 
-    <button>
-        Criar
-    </button>
+    <div>
+        <small>Use o mouse para aumentar/diminuir sua foto.</small>
+    </div>
 
-    <button onclick="download(event)" type="button">
-        Baixar
-    </button>
+    <div>
+        <button>
+            Criar
+        </button>
+
+        <button onclick="download(event)" type="button">
+            Baixar
+        </button>
+    </div>
 </form>
 
 <canvas id="myCanvas" width="900" height="900"></canvas>
@@ -110,13 +121,11 @@
     function createPreview() {
         var image = document.getElementById('preview');
         cropper = new Cropper(image, {
-            dragMode: 'none',
+            dragMode: 'move',
             cropBoxResizable: false,
-            zoomOnWheel: false,
-            zoomOnTouch: false,
+            cropBoxMovable: false,
             ready: function () {
-                cropper.setCropBoxData({width: 176, height: 176});
-                cropper.zoomTo(1);
+                cropper.setCropBoxData({width: 176, height: 176, left: 232, top: 72});
             }
         });
     }
@@ -129,7 +138,10 @@
 
     function getPreviewCanvas() {
         return new Promise(function (resolve) {
-            cropper.getCroppedCanvas().toBlob(function (blob){
+            cropper.getCroppedCanvas({
+                width: 176,
+                height: 176
+            }).toBlob(function (blob){
                 resolve(blob);
             })
         });
@@ -195,7 +207,6 @@
 
                 context.drawImage(scratchCanvas, 7, 696.6);
             }
-            // imageUser.src = "img/user.png";
 
             var reader = new FileReader();
             reader.onload = function (e) {
