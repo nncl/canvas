@@ -52,6 +52,23 @@
             width: 640px;
             height: 320px;
             background: rgb(0 0 0 / 5%);
+            position: relative;
+        }
+
+        .preview-buttons {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+
+        .preview-buttons button {
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
         }
     </style>
 </head>
@@ -71,6 +88,11 @@
 
     <div class="preview-wrapper">
         <img src="" alt="" id="preview">
+
+        <div class="preview-buttons">
+            <button type="button" onclick="toggleZoom(true)">+</button>
+            <button type="button" onclick="toggleZoom(false)">-</button>
+        </div>
     </div>
 
     <div>
@@ -238,6 +260,13 @@
         link.download = 'caoa.png';
         link.href = document.getElementById('myCanvas').toDataURL()
         link.click();
+    }
+
+    function toggleZoom(isZoomIn) {
+        var value = isZoomIn ? 0.1 : -0.1;
+        if (cropper) {
+            cropper.zoom(value);
+        }
     }
 </script>
 </body>
