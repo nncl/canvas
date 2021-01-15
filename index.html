@@ -140,7 +140,8 @@
         return new Promise(function (resolve) {
             cropper.getCroppedCanvas({
                 width: 176,
-                height: 176
+                height: 176,
+                fillColor: '#FFFFFF'
             }).toBlob(function (blob){
                 resolve(blob);
             })
