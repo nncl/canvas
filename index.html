@@ -76,10 +76,11 @@
 <h1>CAOA Canvas</h1>
 
 <form onsubmit="create(event)" method="POST">
-    <input type="text" name="username" placeholder="Nome" maxlength="22">
-    <input type="text" name="job" placeholder="Cargo">
+    <input type="text" name="username" placeholder="Nome" maxlength="22" required>
+    <input type="text" name="job" placeholder="Cargo" required>
     <input type="tel" name="phone" placeholder="Telefone">
-    <input type="email" name="email" placeholder="E-mail">
+    <input type="tel" name="whatsapp" placeholder="WhatsApp">
+    <input type="email" name="email" placeholder="E-mail" required>
 
     <div>
         <label for="thumb">Imagem usuário (176x176)</label>
@@ -166,7 +167,7 @@
                 height: 176,
                 fillColor: '#FFFFFF',
                 imageSmoothingQuality: 'high'
-            }).toBlob(function (blob){
+            }).toBlob(function (blob) {
                 resolve(blob);
             })
         });
@@ -196,17 +197,25 @@
             context.fillStyle = "#00C28A";
             context.fillText(job, 199, 830);
 
-            context.font = "normal normal 400 24px Roboto Condensed";
-            context.fillStyle = "#FFFFFF";
-            context.fillText(whatsapp, 536, 795);
+            if (whatsapp) {
+                context.font = "normal normal 400 24px Roboto Condensed";
+                context.fillStyle = "#FFFFFF";
+                context.fillText(whatsapp, 536, 795);
+            }
 
-            context.font = "normal normal 400 24px Roboto Condensed";
-            context.fillStyle = "#FFFFFF";
-            context.fillText(phone, 536, 828);
+            if (phone) {
+                context.font = "normal normal 400 24px Roboto Condensed";
+                context.fillStyle = "#FFFFFF";
+                var posY = whatsapp ? 828 : 795;
+                context.fillText(phone, 536, posY);
+            }
 
             context.font = "normal normal 400 20px Roboto Condensed";
             context.fillStyle = "#FFFFFF";
-            context.fillText(email, 536, 858);
+
+            // Calculating its Y position if phone and whatsapp either exists or not, both or single
+            var posPhoneY = whatsapp ? (phone ? 858 : 828) : (phone ? 828 : 795);
+            context.fillText(email, 536, posPhoneY);
 
             /**
              * Create rounded user thumb
@@ -242,8 +251,68 @@
             reader.onload = function (e) {
                 imageUser.src = e.target.result;
             };
-            reader.readAsDataURL(thumb);
+
+            if (thumb) {
+                reader.readAsDataURL(thumb);
+            }
+
+            /**
+             * Create icons
+             */
+
+            /**
+             * WHATSAPP
+             */
+            if (whatsapp) {
+                var whatsappIcon = new Image();
+                whatsappIcon.src = 'img/ico-whats.png';
+                whatsappIcon.onload = () => {
+                    var scratchCanvas = document.createElement('canvas');
+                    var scratchCtx = scratchCanvas.getContext('2d');
+
+                    scratchCtx.drawImage(whatsappIcon, 0, 0);
+                    context.drawImage(scratchCanvas, 501, 770.5);
+                }
+            }
+
+            /**
+             * PHONE
+             */
+            if (phone) {
+                var phoneIcon = new Image();
+                phoneIcon.src = 'img/ico-phone.png';
+                phoneIcon.onload = () => {
+                    var scratchCanvasPhone = document.createElement('canvas');
+
+                    var scratchCtx = scratchCanvasPhone.getContext('2d');
+
+                    scratchCtx.drawImage(phoneIcon, 0, 0);
+
+                    var posY = whatsapp ? 807 : 770.5;
+                    context.drawImage(scratchCanvasPhone, 504, posY);
+                }
+            }
+
+            /**
+             * E-MAIL
+             */
+            if (email) {
+                var emailIcon = new Image();
+                emailIcon.src = 'img/ico-mail.png';
+                emailIcon.onload = () => {
+                    var scratchCanvasEmail = document.createElement('canvas');
+
+                    var scratchCtx = scratchCanvasEmail.getContext('2d');
+
+                    scratchCtx.drawImage(emailIcon, 0, 0);
+
+                    // Calculating its Y position if phone and whatsapp either exists or not, both or single
+                    var posY = whatsapp ? (phone ? 841 : 810) : (phone ? 810 : 775.5);
+                    context.drawImage(scratchCanvasEmail, 504, posY);
+                }
+            }
         };
+
         imageObj.src = "img/bg.png";
     };
 
@@ -255,11 +324,11 @@
 
         var username = document.getElementsByName('username')[0].value;
         var job = document.getElementsByName('job')[0].value;
-        var whatsapp = document.getElementsByName('phone')[0].value;
-        var phone = document.getElementsByName('whatsapp')[0].value;
+        var whatsapp = document.getElementsByName('whatsapp')[0].value;
+        var phone = document.getElementsByName('phone')[0].value;
         var email = document.getElementsByName('email')[0].value;
 
-        createImage(username, job, whatsapp, phone, email, croppedThumb);
+        createImage(username, job, phone, whatsapp, email, croppedThumb);
     }
 
     function download() {
