@@ -76,7 +76,7 @@
 <h1>CAOA Canvas</h1>
 
 <form onsubmit="create(event)" method="POST">
-    <input type="text" name="username" placeholder="Nome" maxlength="15">
+    <input type="text" name="username" placeholder="Nome" maxlength="22">
     <input type="text" name="job" placeholder="Cargo">
     <input type="tel" name="phone" placeholder="Telefone">
     <input type="email" name="email" placeholder="E-mail">
@@ -177,6 +177,7 @@
         username,
         job,
         phone,
+        whatsapp,
         email,
         thumb
     ) {
@@ -187,21 +188,25 @@
         imageObj.onload = function () {
             context.drawImage(imageObj, 0, 0);
 
-            context.font = "normal normal bold 39.5px Roboto Condensed";
+            context.font = "normal normal bold 24.5px Roboto Condensed";
             context.fillStyle = "#FFFFFF";
-            context.fillText(username, 218.1, 825);
+            context.fillText(username, 200, 796);
 
-            context.font = "normal normal 400 23px Roboto Condensed";
+            context.font = "normal normal 400 24px Roboto Condensed";
             context.fillStyle = "#00C28A";
-            context.fillText(job, 218.1, 850);
+            context.fillText(job, 199, 830);
 
-            context.font = "normal normal 400 27px Roboto Condensed";
+            context.font = "normal normal 400 24px Roboto Condensed";
             context.fillStyle = "#FFFFFF";
-            context.fillText(phone, 533.1, 820);
+            context.fillText(whatsapp, 536, 795);
 
-            context.font = "normal normal 400 23px Roboto Condensed";
+            context.font = "normal normal 400 24px Roboto Condensed";
             context.fillStyle = "#FFFFFF";
-            context.fillText(email, 533.1, 849.5);
+            context.fillText(phone, 536, 828);
+
+            context.font = "normal normal 400 20px Roboto Condensed";
+            context.fillStyle = "#FFFFFF";
+            context.fillText(email, 536, 858);
 
             /**
              * Create rounded user thumb
@@ -250,10 +255,11 @@
 
         var username = document.getElementsByName('username')[0].value;
         var job = document.getElementsByName('job')[0].value;
-        var phone = document.getElementsByName('phone')[0].value;
+        var whatsapp = document.getElementsByName('phone')[0].value;
+        var phone = document.getElementsByName('whatsapp')[0].value;
         var email = document.getElementsByName('email')[0].value;
 
-        createImage(username, job, phone, email, croppedThumb);
+        createImage(username, job, whatsapp, phone, email, croppedThumb);
     }
 
     function download() {
